@@ -19,6 +19,13 @@ namespace WindowsService.WindowsService
 
         const string _log_target = "ServiceSummary";
 
+        public ServiceSummary(string serviceName)
+            : this(ServiceController.GetServices().
+                  FirstOrDefault(x =>
+                      x.ServiceName.Equals(serviceName, StringComparison.OrdinalIgnoreCase) ||
+                      x.DisplayName.Equals(serviceName, StringComparison.OrdinalIgnoreCase)))
+        { }
+
         public ServiceSummary(ServiceController sc)
         {
             this.Name = sc.ServiceName;
