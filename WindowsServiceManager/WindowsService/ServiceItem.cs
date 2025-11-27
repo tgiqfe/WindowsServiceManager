@@ -1,6 +1,6 @@
 ﻿using System.Management;
 using System.ServiceProcess;
-using WindowsServiceManager.WindowsService;
+using WindowsServiceManager.Functions.EnumParser;
 
 namespace WindowsService.WindowsService
 {
@@ -104,7 +104,7 @@ namespace WindowsService.WindowsService
                             x.ServiceName.Equals(serviceName, StringComparison.OrdinalIgnoreCase) ||
                             x.DisplayName.Equals(serviceName, StringComparison.OrdinalIgnoreCase));
                 return sc != null &&
-                    sc.StartType == ServiceParser.StringToStartupType(modeText);
+                    sc.StartType == ServiceStartModeParser.ParamsToRaw(modeText);
             }
             catch (Exception e)
             {
@@ -273,8 +273,7 @@ namespace WindowsService.WindowsService
             Logger.WriteLine("Info", $"Changing startup type of {_log_target}: {this.Name} to {modeText}");
             try
             {
-                //var mode = ServiceComponent.ServiceStartModeMap<ServiceStartMode>.StringToValue(modeText);
-                var mode = ServiceParser.StringToStartupType(modeText);
+                var mode = ServiceStartModeParser.ParamsToRaw(modeText);
                 var sc = ServiceController.GetServices().
                     FirstOrDefault(x =>
                         x.ServiceName.Equals(this.Name, StringComparison.OrdinalIgnoreCase) ||
